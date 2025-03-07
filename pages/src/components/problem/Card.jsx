@@ -23,6 +23,8 @@ const Card = ({ title, status, description, date, author, imageUrl, onClick }) =
               ? "bg-red-100 text-red-600"
               : status === "Accepted"
               ? "bg-green-100 text-green-600"
+              : status === "Need to verify"
+              ? "bg-blue-100 text-purple-600"
               : "bg-gray-100 text-gray-600" // Default style for unknown status
           }`}
         >

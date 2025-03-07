@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../pages/Login/Login";
-import SurveyCreation from "../pages/surveycreation";
-import ProblemRaisorDashboard from "../pages/Problemraisordashboard/problemraisordashboard";
-import SupervisorDashboard from "../pages/superviserdashboard"; // Added missing import
+import Login from "../pages/Login/Login"; // Ensure this file exists
+import SurveyCreation from "../pages/Problemraisordashboard/surveycreation"; // Ensure this file exists
+import ProblemRaisorDashboard from "../pages/Problemraisordashboard/problemraisordashboard"; // Ensure this file exists
+import SupervisorDashboard from "../pages/Superviserdashboard/superviserdashboard"; // Ensure this file exists
+import Problemsolver from "../pages/Problemsolverdashboard/problemsolverdashboard"; // Ensure this file exists
 
 export default function Routernav() {
   return (
@@ -12,6 +13,7 @@ export default function Routernav() {
       <Route path="/survey" element={<SurveyCreation />} />
       <Route path="/Problemrd" element={<ProblemRaisorDashboard />} />
       <Route path="/Superviser" element={<SupervisorDashboard />} />
+      <Route path="/Problemsol" element={<Problemsolver />} />
     </Routes>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Plus } from "lucide-react"
 import EventCard from "../problem/EventCard";
+import { useNavigate } from "react-router-dom";
 
 const Calender = ({ days, dates, timeSlots, events, selectedDay, onDayClick }) => {
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -24,6 +25,11 @@ const Calender = ({ days, dates, timeSlots, events, selectedDay, onDayClick }) =
     }
   }, [timeSlots.length])
 
+  const navigate = useNavigate()
+  const handleCreate = () => {
+    console.log("Create event")
+    navigate("/survey")
+  }
   useEffect(() => {
     updateCurrentTime()
     const interval = setInterval(updateCurrentTime, 60000)
@@ -75,7 +81,7 @@ const Calender = ({ days, dates, timeSlots, events, selectedDay, onDayClick }) =
         {/* Current time indicator */}
         <div className="absolute left-0 right-0 p-55 flex items-center" style={{ top: `${currentTimePosition}px` }}>
           {/* <div className="w-full h-0.5 bg-red-400"></div> */}
-          <div className="bg-white border border-gray-300 rounded-full p-2 absolute left-1/2 transform -translate-x-1/2">
+          <div className="bg-white border border-gray-300 rounded-full p-2 absolute left-1/2 transform -translate-x-1/2" onClick={handleCreate}>
             <Plus className="h-4 w-4 text-gray-400" />
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2 mt-8 text-gray-500">Click to create log</div>

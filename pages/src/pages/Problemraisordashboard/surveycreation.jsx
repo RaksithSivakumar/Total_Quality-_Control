@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { IoArrowBack, IoSearchOutline, IoAdd } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
 import { BiBold, BiItalic, BiUnderline, BiListOl, BiListUl, BiLink } from "react-icons/bi";
-import Input from "../components/input/Input";
-import Card from "../components/problem/Card";
-import LogCreation from "../components/Popups/LogCreation";
-import Rejected from "../components/Popups/Rejected";
-import Accepted from "../components/Popups/Accepted";
+import Input from "../../components/input/Input";
+import Card from "../../components/problem/Card";
+import LogCreation from "../../components/Popups/LogCreation";
+import Rejected from "../../components/Popups/Rejected";
+import Accepted from "../../components/Popups/Accepted";
 
 const Dashboard = () => {
   // State variables

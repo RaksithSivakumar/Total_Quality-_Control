@@ -1,17 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { IoNotificationsSharp, IoSettingsOutline, IoSearchOutline } from "react-icons/io5";
+import {
+  IoNotificationsSharp,
+  IoSettingsOutline,
+  IoSearchOutline,
+} from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProjectLogo from "./assets/ProjectLogo.jsx";
 import { Avatar } from "@mui/material";
 import PointSummary from "./components/Popups/PointSummary";
+import Card from "./components/problem/Card.jsx";
 import Routernav from "./router/Routernav";
+
+// Mock card data for filtering
+const cardData = [
+  {
+    title: "Productivity failure",
+    status: "Need to verify",
+    description: "Productive failure is a learning design where individuals are allowed to fail in a managed...",
+    date: "10/07/2025",
+    author: "J. David",
+    imageUrl: "https://example.com/image1.png",
+  },
+  // Add more cards as needed
+];
 
 const App = ({ image = "/placeholder.svg?height=60&width=60" }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLoginPage = location.pathname === "/login";
+  const isSurveyCreationPage = location.pathname === "/survey"; // Check if the current page is the survey creation page
   const [openPointsSummary, setOpenPointsSummary] = useState(false); // For Points Summary popup
   const [profileAnchorEl, setProfileAnchorEl] = useState(null); // For positioning the Points Summary popup
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -24,6 +44,19 @@ const App = ({ image = "/placeholder.svg?height=60&width=60" }) => {
     setProfileAnchorEl(event.currentTarget);
     setOpenPointsSummary(true);
   };
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Filter cards based on search query
+  const filteredCards = cardData.filter(
+    (card) =>
+      card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      card.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      card.author.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="h-screen w-screen overflow-hidden">
@@ -45,7 +78,9 @@ const App = ({ image = "/placeholder.svg?height=60&width=60" }) => {
                 <IoSearchOutline className="text-[#718EBF] text-xl" />
                 <input
                   type="text"
-                  placeholder="Search for anything..."
+                  placeholder="Search any problem"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                   className="bg-transparent border-none outline-none w-full ml-2 text-[#8BA3CB]"
                 />
               </div>
@@ -85,11 +120,19 @@ const App = ({ image = "/placeholder.svg?height=60&width=60" }) => {
         </div>
       )}
 
+      {/* Render PointSummary only on the survey creation page */}
+      {isSurveyCreationPage && (
+        <PointSummary
+          open={openPointsSummary}
+          onClose={() => setOpenPointsSummary(false)}
+          anchorEl={profileAnchorEl}
+        />
+      )}
+
       {/* Main content area - Full height on login page */}
       <div className={`${isLoginPage ? "h-full" : "flex-1"} overflow-auto`}>
         <Routernav />
       </div>
-      <PointSummary open={openPointsSummary} onClose={() => setOpenPointsSummary(false)} anchorEl={profileAnchorEl} />
     </div>
   );
 };
