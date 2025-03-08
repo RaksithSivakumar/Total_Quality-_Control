@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IoArrowBack, IoSearchOutline, IoAdd } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
 import { BiBold, BiItalic, BiUnderline, BiListOl, BiListUl, BiLink } from "react-icons/bi";
@@ -141,9 +141,9 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 scrollbar-hide" style={{ overflow: "hidden" }}>
-      <div className="flex flex-col lg:flex-row h-screen justify-between w-full bg-white p-6 border-b border-[#D3E4FF] scrollbar-hide">
+      <div className="flex flex-col lg:flex-row h-screen justify-between w-full bg-white p-4 lg:p-6 border-b border-[#D3E4FF] scrollbar-hide">
         {/* Left side - Log creation form */}
-        <div className="w-full lg:w-3/5 p-1 overflow-x-auto overflow-y-auto scrollbar-hide">
+        <div className="w-full lg:w-4/5 p-1 overflow-x-auto overflow-y-auto scrollbar-hide">
           <div className="flex items-center mb-6">
             <button className="text-gray-500 mr-3" onClick={() => setOpen(false)}>
               <IoArrowBack />
@@ -171,10 +171,10 @@ const Dashboard = () => {
             </div>
 
             {/* Add New Button (Full Width) */}
-            <div className="w-full mt-4 flex items-center">
+            <div className="w-full mt-4 flex flex-col lg:flex-row items-center">
               <input
                 type="text"
-                className="flex-1 px-3 py-2 text-sm rounded-md border border-[#FF7622] mr-2"
+                className="flex-1 px-3 py-2 text-sm rounded-md border border-[#FF7622] mr-0 lg:mr-2 mb-2 lg:mb-0"
                 placeholder="New Category Name"
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
@@ -240,7 +240,7 @@ const Dashboard = () => {
             <p className="text-xs text-gray-500 mb-3">Add your documents here, and you can upload up to 5 files max</p>
             <div className="border border-dashed border-orange-300 rounded-md p-8 flex flex-col items-center justify-center">
               {files.length > 0 ? (
-                <div className="grid grid-cols-3 gap-4 w-full">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                   {files.map((file, index) => (
                     <div key={index} className="relative">
                       <img
@@ -302,7 +302,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Right side - Search and Cards */}
+        {/* Right side - Cards */}
         <div className="w-full lg:w-1/3 flex flex-col h-screen">
           {/* Sticky Search Bar and Profile */}
           <div className="sticky top-0 bg-white z-10 p-4 flex items-center justify-between">

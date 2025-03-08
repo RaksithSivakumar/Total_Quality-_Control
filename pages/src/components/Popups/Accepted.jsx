@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, ChevronDown, ChevronUp, Check } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Check, Trophy } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,66 +9,115 @@ import {
   IconButton,
   Box,
   TextField,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { Trophy } from "lucide-react";
 
 const Accepted = ({ open, onClose }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [files, setFiles] = useState([]); // State for uploaded files
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleViewDetails = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleFileUpload = (event) => {
+    const uploadedFiles = Array.from(event.target.files);
+    if (files.length + uploadedFiles.length > 5) {
+      alert("You can upload a maximum of 5 files.");
+      return;
+    }
+    setFiles([...files, ...uploadedFiles]);
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogContent className="bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto scrollbar-hide">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <DialogTitle>
-            <div className="flex items-center">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+      fullScreen={isMobile}
+    >
+      <DialogContent
+        sx={{
+          bgcolor: "background.paper",
+          borderRadius: 2,
+          p: isMobile ? 2 : 4,
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+      >
+        {/* Dialog Header */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={isMobile ? 2 : 4}
+        >
+          <DialogTitle sx={{ p: 0 }}>
+            <Box display="flex" alignItems="center">
               <IconButton
                 edge="start"
                 color="inherit"
                 onClick={onClose}
                 aria-label="close"
+                sx={{ p: isMobile ? 1 : 2 }}
               >
-                <ArrowLeft />
+                <ArrowLeft fontSize={isMobile ? "small" : "medium"} />
               </IconButton>
-              <Typography
-                variant="h6"
-                component="h1"
-                className="text-lg font-medium ml-4"
-              >
+              <Typography variant="h6" component="h1">
                 Log creation
               </Typography>
-            </div>
+            </Box>
           </DialogTitle>
-          <IconButton aria-label="close" onClick={onClose}>
-            <CloseIcon />
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{ p: isMobile ? 1 : 2 }}
+          >
+            <CloseIcon fontSize={isMobile ? "small" : "medium"} />
           </IconButton>
         </Box>
 
         {/* Accepted Status */}
-        <div className="mb-4">
-          <Typography variant="h6" className="text-green-500 font-medium">
+        <Box mb={isMobile ? 2 : 3} px={isMobile ? 1 : 2}>
+          <Typography
+            variant="h6"
+            sx={{ color: "success.main", fontWeight: "medium" }}
+          >
             Accepted
           </Typography>
-          <Typography variant="body1" className="text-gray-600 mt-2">
+          <Typography variant="body1" sx={{ color: "text.secondary", mt: 1 }}>
             Your problem is forwarded to the problem-solving team by the supervisor.
           </Typography>
-        </div>
+        </Box>
 
-        {/* Points provided */}
-        <div className="mb-4">
-          <Typography variant="body1" className="text-gray-700 font-medium">
+        {/* Points Provided */}
+        <Box mb={isMobile ? 2 : 3} px={isMobile ? 1 : 2}>
+          <Typography variant="body1" sx={{ fontWeight: "medium" }}>
             Points provided
           </Typography>
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 mt-2">
-            <span className="text-gray-600">500 points</span>
-            <Trophy className="h-5 w-5 text-amber-500" />
-          </div>
-        </div>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            p={isMobile ? 1 : 2}
+            bgcolor="grey.100"
+            borderRadius={1}
+            border={1}
+            borderColor="grey.300"
+            mt={1}
+          >
+            <Typography variant="body1" sx={{ color: "text.secondary" }}>
+              500 points
+            </Typography>
+            <Trophy fontSize={isMobile ? "small" : "medium"} color="warning" />
+          </Box>
+        </Box>
 
         {/* View Details Button */}
         <Button
@@ -77,58 +126,57 @@ const Accepted = ({ open, onClose }) => {
           onClick={handleViewDetails}
           aria-expanded={isExpanded}
           aria-label={isExpanded ? "Collapse details" : "Expand details"}
-          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 mt-4"
           sx={{
             justifyContent: "space-between",
             textTransform: "none",
-            color: "gray",
-            borderColor: "lightgray",
+            color: "text.secondary",
+            borderColor: "grey.300",
+            bgcolor: "grey.100",
+            p: isMobile ? 1 : 2,
+            mt: isMobile ? 2 : 3,
+            mx: isMobile ? 1 : 2,
+            "&:hover": {
+              bgcolor: "grey.200",
+              borderColor: "grey.400",
+            },
           }}
         >
-          <span className="text-gray-600">View details</span>
+          <Typography variant="body1">View details</Typography>
           {isExpanded ? (
-            <ChevronUp className="h-5 w-5 text-gray-500" />
+            <ChevronUp fontSize={isMobile ? "small" : "medium"} />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-500" />
+            <ChevronDown fontSize={isMobile ? "small" : "medium"} />
           )}
         </Button>
 
         {/* Expanded Details */}
         {isExpanded && (
-          <div className="space-y-6 mt-6">
+          <Box mt={isMobile ? 2 : 4} px={isMobile ? 1 : 2}>
             {/* Category */}
-            <div>
-              <Typography
-                variant="h6"
-                className="text-gray-700 p-2 font-medium mb-2"
-              >
+            <Box mb={isMobile ? 2 : 3}>
+              <Typography variant="h6" sx={{ fontWeight: "medium", mb: 1 }}>
                 Category
               </Typography>
               <Button
-                onClick={() => setIsActive(!isActive)}
                 variant={isActive ? "contained" : "outlined"}
+                size={isMobile ? "small" : "medium"}
+                onClick={() => setIsActive(!isActive)}
                 sx={{
-                  color: isActive ? "white" : "#FF7622",
-                  backgroundColor: isActive ? "#FF7622" : "transparent",
+                  color: isActive ? "common.white" : "#FF7622",
+                  bgcolor: isActive ? "#FF7622" : "transparent",
                   borderColor: "#FF7622",
                   "&:hover": {
-                    borderColor: "#E56A1E",
-                    backgroundColor: isActive
-                      ? "#E56A1E"
-                      : "rgba(255, 118, 34, 0.04)",
+                    bgcolor: isActive ? "#FF7622" : "grey.100",
                   },
                 }}
               >
                 Productivity failure
               </Button>
-            </div>
+            </Box>
 
             {/* Problem Title */}
-            <div>
-              <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
-              >
+            <Box mb={isMobile ? 2 : 3}>
+              <Typography variant="h6" sx={{ fontWeight: "medium", mb: 1 }}>
                 Problem Title
               </Typography>
               <TextField
@@ -136,78 +184,102 @@ const Accepted = ({ open, onClose }) => {
                 variant="outlined"
                 value="Water leakage"
                 disabled
+                size={isMobile ? "small" : "medium"}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    backgroundColor: "#f9fafb",
+                    bgcolor: "grey.100",
                     "& fieldset": {
                       borderColor: "transparent",
                     },
                   },
                 }}
               />
-            </div>
+            </Box>
 
             {/* Description */}
-            <div>
-              <Typography
-                variant="h6"
-                className="text-gray-700 p-2 font-medium mb-2"
-              >
+            <Box mb={isMobile ? 2 : 3}>
+              <Typography variant="h6" sx={{ fontWeight: "medium", mb: 1 }}>
                 Description
               </Typography>
               <Typography
                 variant="body1"
-                className="text-gray-600 p-4 bg-gray-50 rounded-lg"
+                sx={{
+                  color: "text.secondary",
+                  bgcolor: "grey.100",
+                  p: 2,
+                  borderRadius: 1,
+                }}
               >
                 Unintended escape of water from pipes, fixtures, or structures,
                 leading to potential damage and waste in AS block.
               </Typography>
-            </div>
+            </Box>
 
             {/* Media Upload */}
-            <div>
-              <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
-              >
+            <Box mb={isMobile ? 2 : 3}>
+              <Typography variant="h6" sx={{ fontWeight: "medium", mb: 1 }}>
                 Media Upload
               </Typography>
-              <Typography variant="body2" className="text-gray-500 mb-3">
+              <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
                 Add your documents here, and you can upload up to 5 files max
               </Typography>
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <span className="text-gray-600">phoenix-document.pdf</span>
-                <div className="flex items-center">
-                  <span className="text-blue-500 mr-2">Upload complete</span>
-                  <div className="bg-green-500 rounded-full p-1">
-                    <Check className="h-4 w-4 text-white" />
-                  </div>
-                </div>
-              </div>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                p={2}
+                bgcolor="grey.100"
+                borderRadius={1}
+              >
+                <Typography variant="body1" sx={{ color: "text.secondary" }}>
+                  phoenix-document.pdf
+                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "primary.main", mr: 1 }}
+                  >
+                    Upload complete
+                  </Typography>
+                  <Box bgcolor="success.main" borderRadius="50%" p={0.5}>
+                    <Check fontSize="small" sx={{ color: "common.white" }} />
+                  </Box>
+                </Box>
+              </Box>
               <input
                 type="file"
-                className="mt-2"
-                onChange={(e) => console.log(e.target.files)} // Handle file upload
+                onChange={handleFileUpload}
+                multiple
+                accept=".pdf,.doc,.docx"
+                style={{ marginTop: 8, width: "100%" }}
               />
-            </div>
+            </Box>
 
             {/* Questions */}
-            <div className="space-y-4">
+            <Box>
               {[1, 2, 3, 4, 5].map((num) => (
-                <div key={num}>
-                  <Typography variant="body2" className="text-sm mb-2">
+                <Box key={num} mb={isMobile ? 2 : 3}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
                     {num}. Have you solved this problem?
                   </Typography>
-                  <input
-                    type="text"
+                  <TextField
+                    fullWidth
+                    variant="outlined"
                     placeholder="Yes, I tried to solve the problem"
-                    className="w-full p-3 bg-gray-100 rounded-md border-none outline-none"
-                    aria-label={`Question ${num} answer`}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: "grey.100",
+                        "& fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
                   />
-                </div>
+                </Box>
               ))}
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
       </DialogContent>
     </Dialog>
