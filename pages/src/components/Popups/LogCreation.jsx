@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, ChevronDown, Check } from "lucide-react";
 import {
   Dialog,
@@ -9,10 +9,16 @@ import {
   Button,
   IconButton,
   Box,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material"; // Correct import for CloseIcon
+import { Close as CloseIcon } from "@mui/icons-material";
 
 const LogCreation = ({ open, onClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
   const [isExpanded, setIsExpanded] = useState(false);
   const [status, setStatus] = useState("");
   const [remarks, setRemarks] = useState("");
@@ -38,39 +44,70 @@ const LogCreation = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogContent className="bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto scrollbar-hide">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <DialogTitle>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      fullWidth 
+      maxWidth="md"
+      fullScreen={isMobile}
+      PaperProps={{
+        sx: {
+          borderRadius: isMobile ? 0 : '12px',
+          margin: isMobile ? 0 : '32px',
+          height: isMobile ? '100%' : 'auto',
+          maxHeight: isMobile ? '100%' : '90vh',
+        }
+      }}
+    >
+      <DialogContent className="bg-white p-3 sm:p-6 overflow-y-auto scrollbar-hide">
+        <Box 
+          display="flex" 
+          justifyContent="space-between" 
+          alignItems="center"
+          mb={2}
+          flexDirection={isMobile ? "row" : "row"}
+        >
+          <DialogTitle className="p-0 sm:p-2">
             <div className="flex items-center">
               <IconButton
                 edge="start"
                 color="inherit"
                 onClick={onClose}
                 aria-label="close"
+                size={isMobile ? "small" : "medium"}
               >
-                <ArrowLeft />
+                <ArrowLeft size={isMobile ? 18 : 24} />
               </IconButton>
               <Typography
-                variant="h6"
+                variant={isMobile ? "subtitle1" : "h6"}
                 component="h1"
-                className="text-lg font-medium ml-4"
+                 className="flex justify-between items-center p-4"
               >
                 Log creation
               </Typography>
             </div>
           </DialogTitle>
-          <IconButton aria-label="close" onClick={onClose}>
-            <CloseIcon />
+          <IconButton 
+            aria-label="close" 
+            onClick={onClose}
+            size={isMobile ? "small" : "medium"}
+          >
+            <CloseIcon fontSize={isMobile ? "small" : "medium"} />
           </IconButton>
         </Box>
 
         {/* Status */}
-        <div className="space-y-4 mb-6">
-          <Typography variant="h6" className="text-blue-500 font-medium">
+        <div className="space-y-2 sm:space-y-4 mb-4 sm:mb-6">
+          <Typography 
+            variant={isMobile ? "subtitle1" : "h6"} 
+            className="text-blue-500 font-medium"
+          >
             Problem submitted
           </Typography>
-          <Typography variant="body1" className="text-gray-600 p-2">
+          <Typography 
+            variant="body1" 
+            className="text-gray-600 p-1 sm:p-2 text-sm sm:text-base"
+          >
             Your problem is submitted. Waiting for the supervisor's approval
           </Typography>
 
@@ -80,11 +117,11 @@ const LogCreation = ({ open, onClose }) => {
             fullWidth
             onClick={handleViewDetails}
             aria-expanded={isExpanded}
-            className="flex items-center justify-between p-8 bg-gray-50 rounded-lg hover:bg-gray-100 mt-4" // Added mt-4 here
+            className="flex items-center justify-between p-3 sm:p-8 bg-gray-50 rounded-lg hover:bg-gray-100 mt-2 sm:mt-4 text-xs sm:text-sm"
           >
             <span className="text-gray-600">View details</span>
             <ChevronDown
-              className={`h-5 w-5 text-gray-500 p-1 m-2 ml-auto transition-transform duration-200 ${
+              className={`h-4 w-4 sm:h-5 sm:w-5 text-gray-500 p-1 ml-auto transition-transform duration-200 ${
                 isExpanded ? "rotate-180" : ""
               }`}
             />
@@ -93,22 +130,25 @@ const LogCreation = ({ open, onClose }) => {
 
         {/* Full Form (Conditionally Rendered) */}
         {isExpanded && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Category */}
             <div>
               <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2 p-3 m-4"
+                variant={isMobile ? "subtitle1" : "h6"}
+                className="text-gray-700 font-medium mb-2 p-1 sm:p-3 text-sm sm:text-base"
               >
                 Category
               </Typography>
               <Button
-                onClick={() => setIsActive(!isActive)} // Separate toggle function to avoid triggering save alert
+                onClick={() => setIsActive(!isActive)}
                 variant={isActive ? "contained" : "outlined"}
+                size={isMobile ? "small" : "medium"}
                 sx={{
                   color: isActive ? "white" : "#FF7622",
                   backgroundColor: isActive ? "#FF7622" : "transparent",
                   borderColor: "#FF7622",
+                  fontSize: isMobile ? '0.75rem' : '0.875rem',
+                  padding: isMobile ? '4px 10px' : '6px 16px',
                   "&:hover": {
                     borderColor: "#E56A1E",
                     backgroundColor: isActive
@@ -124,12 +164,15 @@ const LogCreation = ({ open, onClose }) => {
             {/* Problem Title */}
             <div>
               <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
+                variant={isMobile ? "subtitle1" : "h6"}
+                className="text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base"
               >
                 Problem Title
               </Typography>
-              <Typography variant="body1" className="text-gray-600 p-4">
+              <Typography 
+                variant="body1" 
+                className="text-gray-600 p-2 sm:p-4 text-sm sm:text-base"
+              >
                 Water leakage
               </Typography>
             </div>
@@ -137,12 +180,15 @@ const LogCreation = ({ open, onClose }) => {
             {/* Description */}
             <div>
               <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
+                variant={isMobile ? "subtitle1" : "h6"}
+                className="text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base"
               >
                 Description
               </Typography>
-              <Typography variant="body1" className="text-gray-600 p-2">
+              <Typography 
+                variant="body1" 
+                className="text-gray-600 p-1 sm:p-2 text-sm sm:text-base"
+              >
                 Unintended escape of water from pipes, fixtures, or structures,
                 leading to potential damage and waste in AS block.
               </Typography>
@@ -151,20 +197,23 @@ const LogCreation = ({ open, onClose }) => {
             {/* Media Upload */}
             <div>
               <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
+                variant={isMobile ? "subtitle1" : "h6"}
+                className="text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base"
               >
                 Media Upload
               </Typography>
-              <Typography variant="body2" className="text-gray-500 p-2 mb-3">
+              <Typography 
+                variant="body2" 
+                className="text-gray-500 p-1 sm:p-2 mb-2 sm:mb-3 text-xs sm:text-sm"
+              >
                 Add your documents here, and you can upload up to 5 files max
               </Typography>
-              <div className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-                <span className="text-gray-600">phoenix-document.pdf</span>
-                <div className="flex items-center ">
-                  <span className="text-blue-500 mr-2">Upload complete</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 sm:p-3 bg-gray-100 rounded-lg">
+                <span className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-0">phoenix-document.pdf</span>
+                <div className="flex items-center">
+                  <span className="text-blue-500 mr-2 text-xs sm:text-sm">Upload complete</span>
                   <div className="bg-green-500 rounded-full p-1">
-                    <Check className="h-4 w-4 text-white" />
+                    <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                   </div>
                 </div>
               </div>
@@ -173,24 +222,27 @@ const LogCreation = ({ open, onClose }) => {
             {/* Questions */}
             <div>
               <Typography
-                variant="h6"
-                className="text-gray-700 font-medium mb-2"
+                variant={isMobile ? "subtitle1" : "h6"}
+                className="text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base"
               >
                 Questions
               </Typography>
             </div>
 
             {/* Additional Questions Section */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {[1, 2, 3, 4, 5].map((num) => (
                 <div key={num}>
-                  <Typography variant="body2" className="text-sm mb-2">
+                  <Typography 
+                    variant="body2" 
+                    className="text-xs sm:text-sm mb-1 sm:mb-2"
+                  >
                     {num}. Have you solved this problem?
                   </Typography>
                   <input
                     type="text"
                     placeholder="Type your answer"
-                    className="w-full p-3 bg-gray-100 rounded-md border-none outline-none"
+                    className="w-full p-2 sm:p-3 bg-gray-100 rounded-md border-none outline-none text-xs sm:text-sm"
                     aria-label={`Question ${num} answer`}
                   />
                 </div>
@@ -198,46 +250,50 @@ const LogCreation = ({ open, onClose }) => {
             </div>
 
             {/* Status Section */}
-            <div className="mt-6">
-              <Typography variant="h6" className="text-sm font-medium mb-2">
+            <div className="mt-4 sm:mt-6">
+              <Typography 
+                variant="subtitle2" 
+                className="text-xs sm:text-sm font-medium mb-1 sm:mb-2"
+              >
                 Status
               </Typography>
-              <div className="flex gap-4 p-4">
+              <div className="flex gap-3 sm:gap-4 p-2 sm:p-4 flex-wrap">
                 <label className="flex items-center">
                   <input
                     type="radio"
                     name="status"
                     value="Accepted"
-                    className="mr-2"
+                    className="mr-1 sm:mr-2"
                     checked={status === "Accepted"}
                     onChange={(e) => setStatus(e.target.value)}
                   />
-                  <span className="text-sm">Accepted</span>
+                  <span className="text-xs sm:text-sm">Accepted</span>
                 </label>
                 <label className="flex items-center">
                   <input
                     type="radio"
                     name="status"
                     value="Rejected"
-                    className="mr-2"
+                    className="mr-1 sm:mr-2"
                     checked={status === "Rejected"}
                     onChange={(e) => setStatus(e.target.value)}
                   />
-                  <span className="text-sm">Rejected</span>
+                  <span className="text-xs sm:text-sm">Rejected</span>
                 </label>
               </div>
             </div>
 
             {/* Remarks Section */}
-            <div className="mt-6">
-              <Typography variant="h6" className="text-sm font-medium mb-4">
-                {" "}
-                {/* Increased margin-bottom */}
+            <div className="mt-4 sm:mt-6">
+              <Typography 
+                variant="subtitle2" 
+                className="text-xs sm:text-sm font-medium mb-2 sm:mb-4"
+              >
                 Remarks
               </Typography>
               <textarea
                 placeholder="Your text goes here"
-                className="w-full p-3 bg-gray-100 rounded-md border-none outline-none min-h-[100px]"
+                className="w-full p-2 sm:p-3 bg-gray-100 rounded-md border-none outline-none min-h-[80px] sm:min-h-[100px] text-xs sm:text-sm"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 aria-label="Remarks"
@@ -245,15 +301,24 @@ const LogCreation = ({ open, onClose }) => {
             </div>
 
             {/* Buttons Section */}
-            <DialogActions className="mt-6 flex justify-end gap-4">
-              <Button onClick={onClose} color="primary">
+            <DialogActions className="mt-4 sm:mt-6 flex justify-end gap-2 sm:gap-4 p-0 sm:p-2">
+              <Button 
+                onClick={onClose} 
+                color="primary"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  fontSize: isMobile ? '0.75rem' : '0.875rem',
+                }}
+              >
                 Back
               </Button>
               <Button
                 onClick={handleSave}
                 variant="contained"
+                size={isMobile ? "small" : "medium"}
                 sx={{
                   backgroundColor: "#FF7622",
+                  fontSize: isMobile ? '0.75rem' : '0.875rem',
                   "&:hover": {
                     backgroundColor: "#E56A1E",
                   },

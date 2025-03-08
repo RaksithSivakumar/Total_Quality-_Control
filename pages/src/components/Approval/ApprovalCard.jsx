@@ -33,10 +33,11 @@ const ApprovalCard = ({ approval }) => {
     const statusStyles = getStatusStyles(status)
   
     return (
-      <div className="bg-gray-100 p-4 rounded-lg">
+      <div className="bg-gray-100 p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-medium">{title}</h3>
-          <span className={`${statusStyles.bg} ${statusStyles.text} px-3 py-1 rounded-md text-sm`}>
+          <span className={`${statusStyles.bg} ${statusStyles.text} px-3 py-1 rounded-mb text-sm`}>
+          {/* bg-[#F0F4F8] p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow */}
             {statusStyles.label}
           </span>
         </div>

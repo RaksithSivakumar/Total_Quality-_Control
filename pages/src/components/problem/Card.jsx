@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 const Card = ({ title, status, description, date, author, imageUrl, onClick }) => {
   return (
     <div
-      className="bg-[#F0F4F8] p-4 rounded-md shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
+      className="bg-[#F0F4F8] p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
       onClick={onClick} // Trigger onClick when the card is clicked
       role="button" // Improve accessibility
       tabIndex={0} // Make the card focusable

@@ -146,7 +146,7 @@ const ApprovalsPanel = ({ approvals }) => {
       <div className="space-y-4">
         {filteredApprovals.length > 0 ? (
           filteredApprovals.map((approval) => (
-            <ApprovalCard key={approval.id} approval={approval} />
+            <ApprovalCard  key={approval.id} approval={approval} />
           ))
         ) : (
           <p className="text-gray-500">No approvals found</p>
